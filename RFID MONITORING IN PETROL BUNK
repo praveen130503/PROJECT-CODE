@@ -1,0 +1,63 @@
+#include<LiquidCrystal.h>
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+String s;
+String a="27001F0EC4F2";
+String b="27001F0F1126";
+
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin(16,2);
+  
+  pinMode(8,OUTPUT);//MOTOR
+  
+  lcd.setCursor(0,0);
+  lcd.print(" SMART PETROL ");
+  lcd.setCursor(0,1);
+  lcd.print("PUMP USING RFID");
+  delay(1000);
+  lcd.clear();
+}
+
+
+void loop() {
+ 
+  lcd.setCursor(0,0);
+  lcd.print("SHOW THE CARD    ");
+  lcd.setCursor(0,1);
+  lcd.print("TO USE PETROL   ");
+  digitalWrite(8, LOW);
+  
+  if(Serial.available())
+  {
+    s = Serial.readString();
+    if(s == a)
+    {
+      lcd.setCursor(0,0);
+      lcd.print("AUTHENTICATED   ");
+      lcd.setCursor(0,1);
+      lcd.print("PETROL PERSON");
+      digitalWrite(8, HIGH);
+      delay(1500);
+      digitalWrite(8, LOW);
+      lcd.setCursor(0,0);
+      lcd.print("   THANK YOU    ");
+      lcd.setCursor(0,1);
+      lcd.print("   VISIT AGIN   ");
+    }
+    else if (s == b){
+      lcd.setCursor(0,0);
+      lcd.print("UNAUTHENTICATED  ");
+      lcd.setCursor(0,1);
+      lcd.print("PERSON           ");
+      digitalWrite(8, LOW);
+      delay(500);
+      lcd.setCursor(0,0);
+      lcd.print("  REGISTER AND  ");
+      lcd.setCursor(0,1);
+      lcd.print("   TRY AGAIN    ");
+    }
+
+  }
+  delay(300);
+}
